@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Post-commit hook: automatically push the current branch to the given remote (default: origin).
+# Usage: the hook runs after each successful commit. If pushing fails (no auth), it will print an error but not abort the commit.
+set -euo pipefail
+
+remote=origin
+branch=$(git rev-parse --abbrev-ref HEAD || echo "HEAD")
+
+if [ "$branch" = "HEAD" ]; then
+  echo "post-commit: detached HEAD, skipping push"
+  exit 0
+fi
+
+if git remote | grep -q "^${remote}$"; then
+  echo "post-commit: pushing branch ${branch} to ${remote}..."
+  if git push "${remote}" "${branch}"; then
+    echo "post-commit: push succeeded"
+  else
+    echo "post-commit: push failed (check auth/config)"
+  fi
+else
+  echo "post-commit: remote '${remote}' not found; skipping push"
+fi
