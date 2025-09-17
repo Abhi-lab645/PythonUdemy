@@ -1,0 +1,10 @@
+# Bytecode
+__pycache__/
+*.pyc
+
+# Editor configs
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
